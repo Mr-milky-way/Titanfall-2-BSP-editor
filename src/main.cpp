@@ -157,6 +157,30 @@ struct WORLD_LIGHTS {
     float unknown_2;
 };
 
+//Lump 55
+struct WORLD_LIGHT_PARENT_INFOS {
+    Vector3 origin;
+    Vector3 intensity;
+    Vector3 normal;
+    Vector3 shadow_offset;
+    int viscluster;
+    EmitType type;
+    int style;
+    float stop_dot;
+    float stop_dot2;
+    float exponent;
+    float radius;
+    float constant;
+    float linear;
+    float quadratic;
+    WorldLightFlags flags;
+    int texture_data;
+    int paren;
+    float unknown_1;
+    float unknown_2;
+    float unknown_3;
+};
+
 int main() {
     return 0;
 }
