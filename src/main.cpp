@@ -134,7 +134,7 @@ enum class WorldLightFlags {
 };
 
 //Lump 54
-struct WORLD_LIGHTS {
+struct WORLD_LIGHTSv2 {
     Vector3 origin;
     Vector3 intensity;
     Vector3 normal;
@@ -157,8 +157,8 @@ struct WORLD_LIGHTS {
     float unknown_2;
 };
 
-//Lump 55
-struct WORLD_LIGHT_PARENT_INFOS {
+//Lump 54
+struct WORLD_LIGHTSv3 {
     Vector3 origin;
     Vector3 intensity;
     Vector3 normal;
