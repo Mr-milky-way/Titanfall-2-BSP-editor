@@ -9,8 +9,6 @@
 #include <filesystem>
 #include <regex>
 
-//TODO: Go back thru and check sizes
-
 struct RGBA32
 {
     uint8_t r;
@@ -22,6 +20,16 @@ struct RGBA32
 struct Vector3F
 {
     float x, y, z;
+};
+
+struct Vector3h
+{
+    int16_t x, y, z;
+};
+
+struct Vector3i
+{
+    int32_t x, y, z;
 };
 
 struct Vector4
@@ -39,6 +47,11 @@ struct Vector2i
     int32_t x, y;
 };
 
+struct Vector2I
+{
+    uint32_t x, y;
+};
+
 
 // Lump 0
 struct Entities
@@ -54,19 +67,27 @@ struct Planes
     float distance;
 };
 
+static_assert(sizeof(Planes) == 16, "Planes struct size mismatch!");
+
 // Lump 2
 struct Texture_Data
 {
-    int vertex_offset;
-    int num_triangles;
-    int material_sort;
+    Vector3F reflectivity;
+    int32_t name_index;
+    Vector2i size;
+    Vector2i view;
+    TextureDataFlags flags;
 };
+
+static_assert(sizeof(Texture_Data) == 36, "Texture_Data struct size mismatch!");
 
 // Lump 3
 struct Vertices
 {
     Vector3F vertex;
 };
+
+static_assert(sizeof(Vertices) == 12, "Vertices struct size mismatch!");
 
 // Lump 4
 // not known
@@ -77,22 +98,26 @@ struct Lightprobe_Parent_Infos
 // Lump 5
 struct Shadow_Environments
 {
-    int first_csm_aabb_node;
-    int first_csm_obj_reference;
-    int first_shadow_mesh;
-    int last_csm_aabb_node;
-    int last_csm_obj_reference;
-    int last_shadow_mesh;
+    int32_t first_csm_aabb_node;
+    int32_t first_csm_obj_reference;
+    int32_t first_shadow_mesh;
+    int32_t last_csm_aabb_node;
+    int32_t last_csm_obj_reference;
+    int32_t last_shadow_mesh;
     Vector3F sun_normal;
 };
+
+static_assert(sizeof(Shadow_Environments) == 36, "Shadow_Environments struct size mismatch!");
 
 // Lump 6
 struct Lightprobe_BSP_Nodes
 {
     Vector3F plane;
     float distance;
-    int children[2];
+    uint32_t children[2];
 };
+
+static_assert(sizeof(Lightprobe_BSP_Nodes) == 24, "Lightprobe_BSP_Nodes struct size mismatch!");
 
 // Lump 7
 // unknown
@@ -105,12 +130,17 @@ struct Models
 {
     Vector3F mins;
     Vector3F maxs;
-    int first_mesh;
-    int num_meshes;
+    uint32_t first_mesh;
+    uint32_t num_meshes;
 };
+
+
+static_assert(sizeof(Models) == 32, "Models struct size mismatch!");
+
 // Lump 24
 struct Entity_Partitions
 {
+    std::vector<std::string> partitions;
 };
 
 // Lump 29
@@ -124,6 +154,8 @@ struct Vertex_Normals
     Vector3F normal;
 };
 
+static_assert(sizeof(Vertex_Normals) == 12, "Vertex_Normals struct size mismatch!");
+
 // Lump 35
 struct Game_Lump
 {
@@ -134,8 +166,10 @@ struct Leaf_Water_Data
 {
     float surface_z;
     float min_z;
-    int texture_info;
+    uint32_t texture_info;
 };
+
+static_assert(sizeof(Leaf_Water_Data) == 12, "Leaf_Water_Data struct size mismatch!");
 
 // Lump 40
 struct PAKFile
@@ -145,20 +179,25 @@ struct PAKFile
 // Lump 42
 struct Cubemap
 {
-    Vector3F origin;
-    int unknown;
+    Vector3i origin;
+    uint32_t unknown;
 };
+
+static_assert(sizeof(Cubemap) == 16, "Cubemap struct size mismatch!");
 
 // Lump 43
 struct Texture_Data_String_Data
 {
+    std::vector<std::string> strings;
 };
 
 // Lump 44
 struct Texture_Data_String_Table
 {
-    uint something;
+    uint32_t something;
 };
+
+static_assert(sizeof(Texture_Data_String_Table) == 4, "Texture_Data_String_Table struct size mismatch!");
 
 // Lump 54
 struct WORLD_LIGHTSv2
@@ -167,9 +206,9 @@ struct WORLD_LIGHTSv2
     Vector3F intensity;
     Vector3F normal;
     Vector3F shadow_offset;
-    int viscluster;
+    int32_t viscluster;
     EmitType type;
-    int style;
+    int32_t style;
     float stop_dot;
     float stop_dot2;
     float exponent;
@@ -179,11 +218,13 @@ struct WORLD_LIGHTSv2
     float linear;
     float quadratic;
     WorldLightFlags flags;
-    int texture_data;
-    int parent;
+    int32_t texture_data;
+    int32_t parent;
     float unknown_1;
     float unknown_2;
 };
+
+static_assert(sizeof(WORLD_LIGHTSv2) == 108, "WORLD_LIGHTSv2 struct size mismatch!");
 
 // Lump 54
 struct WORLD_LIGHTSv3
@@ -192,9 +233,9 @@ struct WORLD_LIGHTSv3
     Vector3F intensity;
     Vector3F normal;
     Vector3F shadow_offset;
-    int viscluster;
+    int32_t viscluster;
     EmitType type;
-    int style;
+    int32_t style;
     float stop_dot;
     float stop_dot2;
     float exponent;
@@ -203,12 +244,14 @@ struct WORLD_LIGHTSv3
     float linear;
     float quadratic;
     WorldLightFlags flags;
-    int texture_data;
-    int paren;
+    int32_t texture_data;
+    int32_t paren;
     float unknown_1;
     float unknown_2;
     float unknown_3;
 };
+
+static_assert(sizeof(WORLD_LIGHTSv3) == 112, "WORLD_LIGHTSv3 struct size mismatch!");
 
 // lump 55
 // unknown
@@ -219,11 +262,13 @@ struct World_Light_Parent_Infos
 // lump 66
 struct Tricoll_Triangles
 {
-    int A;
-    int B;
-    int C;
-    int flags;
+    uint32_t flags: 8;
+    uint32_t C: 7;
+    uint32_t B: 7;
+    uint32_t A: 10;
 };
+
+static_assert(sizeof(Tricoll_Triangles) == 4, "Tricoll_Triangles struct size mismatch!");
 
 // lump 68
 struct Tricoll_Nodes
@@ -233,75 +278,89 @@ struct Tricoll_Nodes
 // lump 69
 struct Tricoll_Headers
 {
-    int flags;
-    TextureDataFlags texture_flags;
-    int texture_data;
-    int num_vertices;
-    int num_triangles;
-    int num_bevel_indices;
-    int first_vertex;
-    int first_triangle;
-    int first_node;
-    int first_bevel_index;
+    int16_t flags;
+    uint16_t texture_flags; // should be TextureDataFlags but uint16_t
+    int16_t texture_data;
+    int16_t num_vertices;
+    int16_t num_triangles;
+    int16_t num_bevel_indices;
+    int32_t first_vertex;
+    int32_t first_triangle;
+    int32_t first_node;
+    int32_t first_bevel_index;
     Vector3F origin;
     float scale;
 };
 
+static_assert(sizeof(Tricoll_Headers) == 44, "Tricoll_Headers struct size mismatch!");
+
 // lump 71
 struct Vertex_Unlit
 {
-    int position_index;
-    int normal_index;
+    uint32_t position_index;
+    uint32_t normal_index;
     Vector2F albedo_uv;
     RGBA32 colour;
 };
+
+static_assert(sizeof(Vertex_Unlit) == 20, "Vertex_Unlit struct size mismatch!");
 
 // lump 72
 struct Vertex_Lit_Flat
 {
-    int position_index;
-    int normal_index;
+    uint32_t position_index;
+    uint32_t normal_index;
     Vector2F albedo_uv;
     RGBA32 colour;
     Vector2F lightmap[2];
 };
+
+static_assert(sizeof(Vertex_Lit_Flat) == 36, "Vertex_Lit_Flat struct size mismatch!");
 
 // lump 73
 struct Vertex_Lit_Bump
 {
-    int position_index;
-    int normal_index;
+    uint32_t position_index;
+    uint32_t normal_index;
     Vector2F albedo_uv;
     RGBA32 colour;
     Vector2F lightmap[2];
-    int tangent[2];
+    int32_t tangent[2];
 };
+
+static_assert(sizeof(Vertex_Lit_Bump) == 44, "Vertex_Lit_Bump struct size mismatch!");
 
 
 // lump 74
 struct Vertex_unlit_TS {
-    int position_index;
-    int normal_index;
+    uint32_t position_index;
+    uint32_t normal_index;
     Vector2F albedo_uv;
     RGBA32 colour;
-    int tangent[2];
+    int32_t tangent[2];
 };
+
+static_assert(sizeof(Vertex_unlit_TS) == 28, "Vertex_unlit_TS struct size mismatch!");
 
 // lump 75
 struct Vertex_Blinn_Phong {
-    int position_index;
-    int normal_index;
+    uint32_t position_index;
+    uint32_t normal_index;
     RGBA32 colour;
     Vector2F albedo_uv;
     Vector2F lightmap[2];
     float tangent[16];
 };
 
+static_assert(sizeof(Vertex_Blinn_Phong) == 100, "Vertex_Blinn_Phong struct size mismatch!");
+
 
 //lump 79
 struct Mesh_Indices {
-    unsigned short int Indices;
+    uint16_t Indices;
 };
+
+static_assert(sizeof(Mesh_Indices) == 2, "Mesh_Indices struct size mismatch!");
 
 //lump 80
 struct Mesh {
@@ -360,3 +419,83 @@ struct cm_Grid {
 };
 
 static_assert(sizeof(cm_Grid) == 28, "cm_Grid struct size mismatch!");
+
+//lump 86
+struct cm_Grid_Cells {
+    uint16_t first_geo_set;
+    uint16_t num_geo_sets;
+};
+
+static_assert(sizeof(cm_Grid_Cells) == 4, "cm_Grid_Cells struct size mismatch!");
+
+//lump 87
+struct cm_Geo_Sets {
+    uint16_t straddle_group;
+    uint16_t num_primitives;
+    uint32_t primitive;
+};
+
+static_assert(sizeof(cm_Geo_Sets) == 8, "cm_Geo_Sets struct size mismatch!");
+
+//lump 88
+struct cm_Geo_Set_Bounds {
+    Vector3h origin;
+    int16_t negative_cos;
+    Vector3h extents;
+    int16_t positive_sin;
+};
+
+static_assert(sizeof(cm_Geo_Set_Bounds) == 16, "cm_Geo_Set_Bounds struct size mismatch!");
+
+//lump 89
+struct cm_Primitives {
+    PrimitiveType type: 8;
+    uint32_t index: 16;
+    uint32_t unique_contents: 8;
+};
+
+static_assert(sizeof(cm_Primitives) == 4, "cm_Primitives struct size mismatch!");
+
+//lump 90
+struct cm_Primitive_Bounds {
+    Vector3h origin;
+    int16_t negative_cos;
+    Vector3h extents;
+    int16_t positive_sin;
+};
+
+static_assert(sizeof(cm_Primitive_Bounds) == 16, "cm_Primitive_Bounds struct size mismatch!");
+
+//lump 91
+struct cm_Unique_Contents {
+    uint32_t count;
+};
+
+static_assert(sizeof(cm_Unique_Contents) == 4, "cm_Unique_Contents struct size mismatch!");
+
+//lump 92
+struct cm_Brushes {
+    Vector3F origin;
+    uint8_t num_non_axial_no_discard;
+    uint8_t num_plane_offsets;
+    int16_t index;
+    Vector3F extents;
+    int32_t brush_side_offset;
+};
+
+static_assert(sizeof(cm_Brushes) == 32, "cm_Brushes struct size mismatch!");
+
+//lump 93
+struct cm_Brush_Side_Plane_Offsets {
+    uint16_t offset;
+};
+
+static_assert(sizeof(cm_Brush_Side_Plane_Offsets) == 2, "cm_Brush_Side_Plane_Offsets struct size mismatch!");
+
+//lump 94
+struct cm_Brush_Side_Properties {
+    uint16_t flags: 7;
+    uint16_t texture_data: 9;
+};
+
+static_assert(sizeof(cm_Brush_Side_Properties) == 2, "cm_Brush_Side_Properties struct size mismatch!");

@@ -39,6 +39,12 @@ enum class TextureDataFlags {
     MASK_VERTEX = 0x600
 };
 
+enum class PrimitiveType {
+    BRUSH = 0x00,
+    TRICOLL = 0x40,
+    PROP = 0x60
+};
+
 enum lumps {
     ENTITIES = 0x0000,
     PLANES = 0x0001,
