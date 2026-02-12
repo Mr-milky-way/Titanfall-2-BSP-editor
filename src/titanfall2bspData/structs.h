@@ -525,7 +525,7 @@ struct Tricoll_Bevel_Indices {
     uint32_t Indices;
 };
 
-static_assert(sizeof(Tricoll_Bevel_Indices) == 4, "Tricoll_Bevel_Starts struct size mismatch!");
+static_assert(sizeof(Tricoll_Bevel_Indices) == 4, "Tricoll_Bevel_Indices struct size mismatch!");
 
 //lump 98
 struct Lightmap_Data_Sky {
