@@ -1966,4 +1966,91 @@ vector<Shadow_Meshs> readShadowMeshs(string filename)
     return data;
 }
 
+BSPFILE readFullBSP(string filename){
+    string basefilename = filename.substr(0, filename.find_last_of("."));
+    BSPFILE mainBSP;
+    mainBSP.entities = readEntities(filename + "." + intToHexString(static_cast<int>(lumps::ENTITIES), 4) + ".bsp_lump");
+    // really should be done after Entity_Partitions
+    mainBSP.entitiesEnv = readEntities(basefilename + "_env" + ".ent");
+    mainBSP.entitiesFx = readEntities(basefilename + "_fx" + ".ent");
+    mainBSP.entitiesScript = readEntities(basefilename + "_script" + ".ent");
+    mainBSP.entitiesSnd = readEntities(basefilename + "_snd" + ".ent");
+
+    mainBSP.planes = readPlanes(filename);
+    mainBSP.texture_data = readTextureData(filename);
+    mainBSP.vertices = readVertices(filename);
+    mainBSP.lightprobe_parent_infos = readLightprobe_Parent_Infos(filename);
+    mainBSP.shadow_environments = readShadow_Environments(filename);
+    mainBSP.lightprobe_bsp_nodes = readLightprobe_BSP_Nodes(filename);
+    mainBSP.lightprobe_bsp_ref_ids = readLightprobe_BSP_REF_IDS(filename);
+    mainBSP.models = readModels(filename);
+    mainBSP.entity_partitions = readEntityPartitions(filename);
+    mainBSP.physics_collide = readPhysicsCollide(filename);
+    mainBSP.vertex_normals = readVertexNormals(filename);
+    mainBSP.game_lumps = readGameLumps(filename);
+    mainBSP.LeafWaterData = readLeafWaterData(filename);
+    mainBSP.pakFile = readpakFile(filename);
+    mainBSP.cubemap = readcubemap(filename);
+    mainBSP.TextureDataStringData = readTextureDataStringData(filename);
+    mainBSP.TextureDataStringTable = readTextureDataStringTable(filename);
+    mainBSP.WorldLights = readWorldLights(filename);
+    mainBSP.WorldLightParentInfo = readWorldLightParentInfo(filename);
+    mainBSP.tricollTriangles = readtricollTriangles(filename);
+    mainBSP.tricollNodes = readtricollNodes(filename);
+    mainBSP.tricollHeaders = readtricollHeaders(filename);
+    mainBSP.VertexUnlit = readVertexUnlit(filename);
+    mainBSP.VertexLitFlat = readVertexLitFlat(filename);
+    mainBSP.VertexLitBump = readVertexLitBump(filename);
+    mainBSP.VertexUnlitTS = readVertexUnlitTS(filename);
+    mainBSP.MeshIndices = readMeshIndices(filename);
+    mainBSP.Meshes = readMeshes(filename);
+    mainBSP.MeshBounds = readMeshBounds(filename);
+    mainBSP.MaterialSorts = readMaterialSorts(filename);
+    mainBSP.LightmapHeaders = readLightmapHeaders(filename);
+    mainBSP.CMGrid = readCMGrid(filename);
+    mainBSP.CMGridCells = readCMGridCells(filename);
+    mainBSP.CMGeoSets = readCMGeoSets(filename);
+    mainBSP.CMGeoSetBounds = readCMGeoSetBounds(filename);
+    mainBSP.CMPrimitives = readCMPrimitives(filename);
+    mainBSP.CMPrimitiveBounds = readCMPrimitiveBounds(filename);
+    mainBSP.CMUniqueContents = readCMUniqueContents(filename);
+    mainBSP.CMBrushes = readCMBrushes(filename);
+    mainBSP.CMBrushSidePlaneOffsets = readCMBrushSidePlaneOffsets(filename);
+    mainBSP.CMBrushSideProperties = readCMBrushSideProperties(filename);
+    mainBSP.CMBrushSideTextureVectors = readCMBrushSideTextureVectors(filename);
+    mainBSP.TricollBevelStarts = readTricollBevelStarts(filename);
+    mainBSP.TricollBevelIndices = readTricollBevelIndices(filename);
+    mainBSP.LightmapDataSky = readLightmapDataSky(filename);
+    mainBSP.CSMaabbNodes = readCSMaabbNodes(filename);
+    mainBSP.CSMobjReferences = readCSMobjReferences(filename);
+    mainBSP.Lightprobe = readLightprobes(filename);
+    mainBSP.StaticPropLightprobeIndices = readStaticPropLightprobeIndices(filename);
+    mainBSP.LightprobeTree = readLightprobeTree(filename);
+    mainBSP.LightprobeReferences = readLightprobeReferences(filename);
+    mainBSP.LightmapDataRealTimeLight = readLightmapDataRealTimeLight(filename);
+    mainBSP.CellbspNodes = readCellbspNodes(filename);
+    mainBSP.Cell = readCells(filename);
+    mainBSP.Portal = readPortals(filename);
+    mainBSP.PortalVertices = readPortalVertices(filename);
+    mainBSP.PortalEdges = readPortalEdges(filename);
+    mainBSP.PortalVertexEdges = readPortalVertexEdges(filename);
+    mainBSP.PortalVertexReferences = readPortalVertexReferences(filename);
+    mainBSP.PortalEdgeReferences = readPortalEdgeReferences(filename);
+    mainBSP.PortalEdgeIntersectAtEdge = readPortalEdgeIntersectAtEdge(filename);
+    mainBSP.PortalEdgeIntersectAtVertex = readPortalEdgeIntersectAtVertex(filename);
+    mainBSP.PortalEdgeIntersectHeader = readPortalEdgeIntersectHeader(filename);
+    mainBSP.OcclusionMeshVertices = readOcclusionMeshVertices(filename);
+    mainBSP.OcclusionMeshIndices = readOcclusionMeshIndices(filename);
+    mainBSP.CellaabbNodes = readCellaabbNodes(filename);
+    mainBSP.OBJReferences = readOBJReferences(filename);
+    mainBSP.OBJReferenceBounds = readOBJReferenceBounds(filename);
+    mainBSP.LightmapDataRTLPage = readLightmapDataRTLPage(filename);
+    mainBSP.LevelInfo = readLevelInfo(filename);
+    mainBSP.ShadowMeshOpaqueVertices = readShadowMeshOpaqueVertices(filename);
+    mainBSP.ShadowMeshAlphaVertices = readShadowMeshAlphaVertices(filename);
+    mainBSP.ShadowMeshIndices = readShadowMeshIndices(filename);
+    mainBSP.ShadowMeshs = readShadowMeshs(filename);
+    return mainBSP;
+}
+
 #endif

@@ -778,4 +778,88 @@ struct Shadow_Meshs {
 
 static_assert(sizeof(Shadow_Meshs) == 12, "Shadow_Meshs struct size mismatch!");
 
+
+struct BSPFILE {
+    std::vector<Entities> entities;
+    std::vector<Entities> entitiesEnv;
+    std::vector<Entities> entitiesFx;
+    std::vector<Entities> entitiesScript;
+    std::vector<Entities> entitiesSnd;
+    std::vector<Planes> planes;
+    std::vector<Texture_Data> texture_data;
+    std::vector<Vertices> vertices;
+    std::vector<Lightprobe_Parent_Infos> lightprobe_parent_infos;
+    std::vector<Shadow_Environments> shadow_environments;
+    std::vector<Lightprobe_BSP_Nodes> lightprobe_bsp_nodes;
+    std::vector<Lightprobe_BSP_REF_IDS> lightprobe_bsp_ref_ids;
+    std::vector<Models> models;
+    std::vector<Entity_Partitions> entity_partitions;
+    std::vector<Physics_Collide> physics_collide;
+    std::vector<Vertex_Normals> vertex_normals;
+    std::vector<Game_Lump> game_lumps;
+    std::vector<Leaf_Water_Data> LeafWaterData;
+    std::vector<PAKFile> pakFile;
+    std::vector<Cubemap> cubemap;
+    std::vector<Texture_Data_String_Data> TextureDataStringData;
+    std::vector<Texture_Data_String_Table> TextureDataStringTable;
+    std::vector<WORLD_LIGHTSv3> WorldLights;
+    std::vector<World_Light_Parent_Infos> WorldLightParentInfo;
+    std::vector<Tricoll_Triangles> tricollTriangles;
+    std::vector<Tricoll_Nodes> tricollNodes;
+    std::vector<Tricoll_Headers> tricollHeaders;
+    std::vector<Vertex_Unlit> VertexUnlit;
+    std::vector<Vertex_Lit_Flat> VertexLitFlat;
+    std::vector<Vertex_Lit_Bump> VertexLitBump;
+    std::vector<Vertex_unlit_TS> VertexUnlitTS;
+    std::vector<Mesh_Indices> MeshIndices;
+    std::vector<Mesh> Meshes;
+    std::vector<Mesh_Bounds> MeshBounds;
+    std::vector<Material_Sorts> MaterialSorts;
+    std::vector<Lightmap_Headers> LightmapHeaders;
+    std::vector<cm_Grid> CMGrid;
+    std::vector<cm_Grid_Cells> CMGridCells;
+    std::vector<cm_Geo_Sets> CMGeoSets;
+    std::vector<cm_Geo_Set_Bounds> CMGeoSetBounds;
+    std::vector<cm_Primitives> CMPrimitives;
+    std::vector<cm_Primitive_Bounds> CMPrimitiveBounds;
+    std::vector<cm_Unique_Contents> CMUniqueContents;
+    std::vector<cm_Brushes> CMBrushes;
+    std::vector<cm_Brush_Side_Plane_Offsets> CMBrushSidePlaneOffsets;
+    std::vector<cm_Brush_Side_Properties> CMBrushSideProperties;
+    std::vector<cm_Brush_Side_Texture_Vectors> CMBrushSideTextureVectors;
+    std::vector<Tricoll_Bevel_Starts> TricollBevelStarts;
+    std::vector<Tricoll_Bevel_Indices> TricollBevelIndices;
+    std::vector<Lightmap_Data_Sky> LightmapDataSky;
+    std::vector<csm_aabb_Nodes> CSMaabbNodes;
+    std::vector<csm_obj_References> CSMobjReferences;
+    std::vector<Lightprobes> Lightprobe;
+    std::vector<Static_Prop_Lightprobe_Indices> StaticPropLightprobeIndices;
+    std::vector<Lightprobe_Tree> LightprobeTree;
+    std::vector<Lightprobe_References> LightprobeReferences;
+    std::vector<Lightmap_Data_Real_Time_Light> LightmapDataRealTimeLight;
+    std::vector<Cell_bsp_Nodes> CellbspNodes;
+    std::vector<Cells> Cell;
+    std::vector<Portals> Portal;
+    std::vector<Portal_Vertices> PortalVertices;
+    std::vector<Portal_Edges> PortalEdges;
+    std::vector<Portal_Vertex_Edges> PortalVertexEdges;
+    std::vector<Portal_Vertex_References> PortalVertexReferences;
+    std::vector<Portal_Edge_References> PortalEdgeReferences;
+    std::vector<Portal_Edge_Intersect_at_Edge> PortalEdgeIntersectAtEdge;
+    std::vector<Portal_Edge_Intersect_at_Vertex> PortalEdgeIntersectAtVertex;
+    std::vector<Portal_Edge_Intersect_Header> PortalEdgeIntersectHeader;
+    std::vector<Occlusion_Mesh_Vertices> OcclusionMeshVertices;
+    std::vector<Occlusion_Mesh_Indices> OcclusionMeshIndices;
+    std::vector<Cell_aabb_Nodes> CellaabbNodes;
+    std::vector<obj_References> OBJReferences;
+    std::vector<obj_Reference_Bounds> OBJReferenceBounds;
+    std::vector<Lightmap_Data_rtl_Page> LightmapDataRTLPage;
+    std::vector<Level_Info> LevelInfo;
+    std::vector<Shadow_Mesh_Opaque_Vertices> ShadowMeshOpaqueVertices;
+    std::vector<Shadow_Mesh_Alpha_Vertices> ShadowMeshAlphaVertices;
+    std::vector<Shadow_Mesh_Indices> ShadowMeshIndices;
+    std::vector<Shadow_Meshs> ShadowMeshs;
+};
+
+
 #endif
