@@ -7,7 +7,12 @@
 #include <vector>
 #include <filesystem>
 #include <filesystem>
-#include "../titanfall2bspData/structs.h"
+#include <QApplication>
+#include <QPushButton>
+#include <QMainWindow>
+#include <QWidget>
+
+#include "titanfall2bspData/structs.h"
 
 using namespace std;
 
@@ -17,7 +22,6 @@ string intToHexString(int value, int width)
     oss << hex << setfill('0') << setw(width) << value;
     return oss.str();
 }
-
 
 vector<Entities> readEntities(string filename)
 {
@@ -291,7 +295,7 @@ vector<Entity_Partitions> readEntityPartitions(string filename)
 
     string line;
     string word;
-    int i=0;
+    int i = 0;
     while (getline(file, line))
     {
         std::stringstream ss(line);
@@ -475,7 +479,7 @@ vector<Texture_Data_String_Data> readTextureDataStringData(string filename)
 
     string line;
     string word;
-    int i=0;
+    int i = 0;
     while (getline(file, line, '\0'))
     {
         std::stringstream ss(line);
@@ -1940,7 +1944,6 @@ vector<Shadow_Mesh_Indices> readShadowMeshIndices(string filename)
     return data;
 }
 
-
 vector<Shadow_Meshs> readShadowMeshs(string filename)
 {
     vector<Shadow_Meshs> data;
@@ -1966,7 +1969,8 @@ vector<Shadow_Meshs> readShadowMeshs(string filename)
     return data;
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     string filename;
     if (argc == 2)
@@ -1981,18 +1985,18 @@ int main(int argc, char *argv[])
     string basefilename = filename.substr(0, filename.find_last_of("."));
 
     vector<Entities> entities = readEntities(filename + "." + intToHexString(static_cast<int>(lumps::ENTITIES), 4) + ".bsp_lump");
-    //really should be done after Entity_Partitions
+    // really should be done after Entity_Partitions
     vector<Entities> entitiesEnv = readEntities(basefilename + "_env" + ".ent");
     vector<Entities> entitiesFx = readEntities(basefilename + "_fx" + ".ent");
     vector<Entities> entitiesScript = readEntities(basefilename + "_script" + ".ent");
     vector<Entities> entitiesSnd = readEntities(basefilename + "_snd" + ".ent");
 
-    vector<Planes> planes = readPlanes(filename);   
-    vector<Texture_Data> texture_data = readTextureData(filename);  
-    vector<Vertices> vertices = readVertices(filename); 
-    vector<Lightprobe_Parent_Infos> lightprobe_parent_infos = readLightprobe_Parent_Infos(filename);    
-    vector<Shadow_Environments> shadow_environments = readShadow_Environments(filename);    
-    vector<Lightprobe_BSP_Nodes> lightprobe_bsp_nodes = readLightprobe_BSP_Nodes(filename); 
+    vector<Planes> planes = readPlanes(filename);
+    vector<Texture_Data> texture_data = readTextureData(filename);
+    vector<Vertices> vertices = readVertices(filename);
+    vector<Lightprobe_Parent_Infos> lightprobe_parent_infos = readLightprobe_Parent_Infos(filename);
+    vector<Shadow_Environments> shadow_environments = readShadow_Environments(filename);
+    vector<Lightprobe_BSP_Nodes> lightprobe_bsp_nodes = readLightprobe_BSP_Nodes(filename);
     vector<Lightprobe_BSP_REF_IDS> lightprobe_bsp_ref_ids = readLightprobe_BSP_REF_IDS(filename);
     vector<Models> models = readModels(filename);
     vector<Entity_Partitions> entity_partitions = readEntityPartitions(filename);
@@ -2062,7 +2066,15 @@ int main(int argc, char *argv[])
     vector<Shadow_Mesh_Indices> ShadowMeshIndices = readShadowMeshIndices(filename);
     vector<Shadow_Meshs> ShadowMeshs = readShadowMeshs(filename);
 
-
     cout << "Read " << VertexLitBump.size() + VertexLitFlat.size() + VertexUnlit.size() + tricollHeaders.size() + tricollNodes.size() + tricollTriangles.size() + WorldLightParentInfo.size() + WorldLights.size() + TextureDataStringTable.size() + TextureDataStringData.size() + cubemap.size() + pakFile.size() + LeafWaterData.size() + planes.size() + texture_data.size() + vertices.size() + entitiesEnv.size() + entitiesFx.size() + entitiesScript.size() + entitiesSnd.size() + models.size() + entity_partitions.size() + physics_collide.size() + vertex_normals.size() + game_lumps.size() << " structs." << endl;
-    return 0;
+    QApplication app(argc, argv);
+
+    QWidget window;
+
+    QPushButton *button = new QPushButton("Hello World", &window);
+    button->setGeometry(10, 10, 80, 30);
+
+    window.show();
+    return app.exec();
+    // return 0;
 }
