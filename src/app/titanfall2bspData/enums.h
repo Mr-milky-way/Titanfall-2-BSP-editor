@@ -1,3 +1,6 @@
+#ifndef ENUMS_H
+#define ENUMS_H
+
 enum class EmitType {
     SURFACE,
     POINT,
@@ -181,3 +184,5 @@ enum lumps {
     SHADOW_MESH_INDICES = 0x007E,
     SHADOW_MESHES = 0x007F
 };
+
+#endif

@@ -9,6 +9,10 @@
 #include <filesystem>
 #include <regex>
 
+#ifndef STRUCTS_H
+#define STRUCTS_H
+
+
 struct RGBA32
 {
     uint8_t r;
@@ -773,3 +777,5 @@ struct Shadow_Meshs {
 };
 
 static_assert(sizeof(Shadow_Meshs) == 12, "Shadow_Meshs struct size mismatch!");
+
+#endif
