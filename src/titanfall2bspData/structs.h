@@ -32,9 +32,14 @@ struct Vector3i
     int32_t x, y, z;
 };
 
-struct Vector4
+struct Vector4f
 {
     float x, y, z, w;
+};
+
+struct Vector4B
+{
+    uint8_t x, y, z, w;
 };
 
 struct Vector2F
@@ -499,3 +504,272 @@ struct cm_Brush_Side_Properties {
 };
 
 static_assert(sizeof(cm_Brush_Side_Properties) == 2, "cm_Brush_Side_Properties struct size mismatch!");
+
+//lump 95
+struct cm_Brush_Side_Texture_Vectors {
+    Vector4f s;
+    Vector4f t;
+};
+
+static_assert(sizeof(cm_Brush_Side_Texture_Vectors) == 32, "cm_Brush_Side_Texture_Vectors struct size mismatch!");
+
+//lump 96
+struct Tricoll_Bevel_Starts {
+    uint16_t start;
+};
+
+static_assert(sizeof(Tricoll_Bevel_Starts) == 2, "Tricoll_Bevel_Starts struct size mismatch!");
+
+//lump 97
+struct Tricoll_Bevel_Indices {
+    uint32_t Indices;
+};
+
+static_assert(sizeof(Tricoll_Bevel_Indices) == 4, "Tricoll_Bevel_Starts struct size mismatch!");
+
+//lump 98
+struct Lightmap_Data_Sky {
+    //TODO
+};
+
+//lump 99
+struct csm_aabb_Nodes {
+    Vector3F mins;
+    uint8_t num_children;
+    uint8_t num_obj_refs;
+    uint16_t total_obj_refs;
+    Vector3F maxs;
+    uint16_t first_child;
+    uint16_t first_obj_ref;
+};
+
+static_assert(sizeof(csm_aabb_Nodes) == 32, "csm_aabb_Nodes struct size mismatch!");
+
+//lump 100
+struct csm_obj_References {
+    uint16_t ref;
+};
+
+static_assert(sizeof(csm_obj_References) == 2, "csm_obj_References struct size mismatch!");
+
+//lump 101
+struct Lightprobes {
+    Vector4B cube[6];
+    int16_t sky_dir_sun_vis[4];
+    uint8_t static_light_weights[4];
+    int16_t static_light_indices[4];
+    uint32_t padding;
+};
+
+static_assert(sizeof(Lightprobes) == 48, "Lightprobes struct size mismatch!");
+
+//lump 102
+struct Static_Prop_Lightprobe_Indices {
+    //unkown
+};
+
+//lump 103
+struct Lightprobe_Tree {
+    uint32_t tag;
+    uint32_t num_entries;
+};
+
+static_assert(sizeof(Lightprobe_Tree) == 8, "Lightprobe_Tree struct size mismatch!");
+
+
+//lump 104
+struct Lightprobe_References {
+    Vector3F origin;
+    uint32_t lightprobe;
+    int32_t unknown;
+};
+
+static_assert(sizeof(Lightprobe_References) == 20, "Lightprobe_References struct size mismatch!");
+
+//lump 105
+struct Lightmap_Data_Real_Time_Light {
+    //TODO
+};
+
+
+//lump 106
+struct Cell_bsp_Nodes {
+    int32_t plane;
+    int32_t child;
+};
+
+static_assert(sizeof(Cell_bsp_Nodes) == 8, "Cell_bsp_Nodes struct size mismatch!");
+
+//lump 107
+struct Cells {
+    int16_t num_portals;
+    int16_t first_portal;
+    int16_t flags;
+    int16_t leaf_water_data;
+};
+
+static_assert(sizeof(Cells) == 8, "Cells struct size mismatch!");
+
+//lump 108
+struct Portals {
+    uint8_t is_reversed;
+    PortalType type;
+    uint8_t num_edges;
+    uint8_t padding;
+    int16_t first_reference;
+    int16_t cell;
+    int32_t plane;
+};
+
+static_assert(sizeof(Portals) == 12, "Portals struct size mismatch!");
+
+//lump 109
+struct Portal_Vertices {
+    Vector3F vertex;
+};
+
+static_assert(sizeof(Portal_Vertices) == 12, "Portal_Vertices struct size mismatch!");
+
+//lump 110
+struct Portal_Edges {
+    uint16_t edges;
+};
+
+static_assert(sizeof(Portal_Edges) == 2, "Portal_Edges struct size mismatch!");
+
+//lump 111
+struct Portal_Vertex_Edges {
+    int16_t index[8];
+};
+
+static_assert(sizeof(Portal_Vertex_Edges) == 16, "Portal_Vertex_Edges struct size mismatch!");
+
+//lump 112
+struct Portal_Vertex_References {
+    uint16_t ref;
+};
+
+static_assert(sizeof(Portal_Vertex_References) == 2, "Portal_Vertex_References struct size mismatch!");
+
+//lump 113
+struct Portal_Edge_References {
+    uint16_t ref;
+};
+
+static_assert(sizeof(Portal_Edge_References) == 2, "Portal_Edge_References struct size mismatch!");
+
+//lump 114
+struct Portal_Edge_Intersect_at_Edge {
+    int16_t index[8];
+};
+
+static_assert(sizeof(Portal_Edge_Intersect_at_Edge) == 16, "Portal_Edge_Intersect_at_Edge struct size mismatch!");
+
+//lump 115
+struct Portal_Edge_Intersect_at_Vertex {
+    int16_t index[8];
+};
+
+static_assert(sizeof(Portal_Edge_Intersect_at_Vertex) == 16, "Portal_Edge_Intersect_at_Vertex struct size mismatch!");
+
+//lump 116
+struct Portal_Edge_Intersect_Header {
+    uint32_t start;
+    uint32_t count;
+};
+
+static_assert(sizeof(Portal_Edge_Intersect_Header) == 8, "Portal_Edge_Intersect_Header struct size mismatch!");
+
+//lump 117
+struct Occlusion_Mesh_Vertices {
+    Vector3F vertex;
+};
+
+static_assert(sizeof(Occlusion_Mesh_Vertices) == 12, "Occlusion_Mesh_Vertices struct size mismatch!");
+
+//lump 118
+struct Occlusion_Mesh_Indices {
+    int16_t indices;
+};
+
+static_assert(sizeof(Occlusion_Mesh_Indices) == 2, "Occlusion_Mesh_Indices struct size mismatch!");
+
+//lump 119
+struct Cell_aabb_Nodes {
+    Vector3F origin;
+    uint8_t num_children;
+    uint8_t num_obj_refs;
+    uint16_t total_obj_refs;
+    Vector3F extents;
+    uint16_t first_child;
+    uint16_t first_obj_ref;
+};
+
+static_assert(sizeof(Cell_aabb_Nodes) == 32, "Cell_aabb_Nodes struct size mismatch!");
+
+//lump 120
+struct obj_References {
+    uint16_t ref;
+};
+
+static_assert(sizeof(obj_References) == 2, "obj_References struct size mismatch!");
+
+//lump 121
+struct obj_Reference_Bounds {
+    Vector3F mins;
+    int32_t mins_zero;
+    Vector3F maxs;
+    int32_t maxs_zero;
+};
+
+static_assert(sizeof(obj_Reference_Bounds) == 32, "obj_Reference_Bounds struct size mismatch!");
+
+//lump 122
+struct Lightmap_Data_rtl_Page {
+    //unkown
+};
+
+//lump 123
+struct Level_Info {
+    uint32_t first_decal_mesh;
+    uint32_t first_transparent_mesh;
+    uint32_t first_sky_mesh;
+    uint32_t num_static_props;
+    Vector3F sun_normal;
+};
+
+static_assert(sizeof(Level_Info) == 28, "Level_Info struct size mismatch!");
+
+
+//lump 124
+struct Shadow_Mesh_Opaque_Vertices {
+    Vector3F vertex;
+};
+
+static_assert(sizeof(Shadow_Mesh_Opaque_Vertices) == 12, "Shadow_Mesh_Opaque_Vertices struct size mismatch!");
+
+//lump 125
+struct Shadow_Mesh_Alpha_Vertices {
+    Vector3F position;
+    Vector2F uv;
+};
+
+static_assert(sizeof(Shadow_Mesh_Alpha_Vertices) == 20, "Shadow_Mesh_Alpha_Vertices struct size mismatch!");
+
+//lump 126
+struct Shadow_Mesh_Indices {
+    uint16_t indices;
+};
+
+static_assert(sizeof(Shadow_Mesh_Indices) == 2, "Shadow_Mesh_Indices struct size mismatch!");
+
+
+//lump 127
+struct Shadow_Meshs {
+    uint32_t vertex_offset;
+    uint32_t num_triangles;
+    int16_t is_opaque;
+    int16_t material_sort;
+};
+
+static_assert(sizeof(Shadow_Meshs) == 12, "Shadow_Meshs struct size mismatch!");

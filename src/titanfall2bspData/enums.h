@@ -25,6 +25,12 @@ enum class MeshFlags {
     MASK_VERTEX = 0x600,
 };
 
+enum class PortalType : uint8_t {
+    CELL = 0,
+    SKYBOX = 1,
+    WATER = 2
+};
+
 enum class TextureDataFlags {
     SKY_2D = 0x0002,
     SKY = 0x0004,
