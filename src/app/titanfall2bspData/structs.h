@@ -373,11 +373,11 @@ static_assert(sizeof(Mesh_Indices) == 2, "Mesh_Indices struct size mismatch!");
 
 //lump 80
 struct Mesh {
-    uint32_t first_mesh_index;
+    uint32_t first_mesh_index; // index into MeshIndices
     uint16_t num_triangles;
-    uint16_t first_vertex;
+    uint16_t first_vertex; // index to this Mesh's first VertexReservedX
     uint16_t num_vertices;
-    int8_t   vertex_type;
+    int8_t   vertex_type; // VERTEX_RESERVED_X index
     int8_t   cubemap;
     int8_t   styles[4];
     int16_t  luxel_origin[2];
