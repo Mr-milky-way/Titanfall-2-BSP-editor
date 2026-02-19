@@ -1449,8 +1449,7 @@ vector<Cells> readCells(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CELLS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file || std::filesystem::file_size(filename) % sizeof(vector<Cells> readCells(string filename)
-)  != 0)
+    if (!file || std::filesystem::file_size(filename) % sizeof(vector<Cells>)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};

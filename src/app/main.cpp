@@ -13,6 +13,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QObject>
+#include <QFileDialog>
 
 #include "titanfall2bspData/structs.h"
 #include "titanfall2bspData/helperfunctions.h"
@@ -34,6 +35,8 @@ void createOBJfile(BSPFILE bsp)
     {
         Models &model = bsp.models[i];
 
+        file << "g model" << i << endl;
+
         for (int m = model.first_mesh; m < model.first_mesh + model.num_meshes; m++)
         {
             Mesh &mesh = bsp.Meshes[m];
@@ -42,7 +45,7 @@ void createOBJfile(BSPFILE bsp)
             switch ((int)mesh.vertex_type)
             {
             case 0:
-                //cout << "new VertexUnlit" << endl;
+                // cout << "new VertexUnlit" << endl;
                 /*
                 for (int t = 0; t < mesh.num_triangles * 3; t += 3)
                 {
@@ -52,24 +55,25 @@ void createOBJfile(BSPFILE bsp)
 
                     file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
                 }*/
-               //also some sort of boxes
+                // also some sort of boxes
                 break;
             case 1:
-            /*
-                cout << "new VertexLitFlat" << endl;
-                for (int t = 0; t < mesh.num_triangles * 3; t += 3)
-                {
-                    int idx0 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
-                    int idx1 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t + 1].Indices].position_index + 1;
-                    int idx2 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
+                /*
+                    cout << "new VertexLitFlat" << endl;
+                    for (int t = 0; t < mesh.num_triangles * 3; t += 3)
+                    {
+                        int idx0 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
+                        int idx1 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t + 1].Indices].position_index + 1;
+                        int idx2 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
 
-                    file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
-                }*/
+                        file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
+                    }*/
                 break;
             case 2:
-                //seems to have most map data
+                // seems to have most map data
                 cout << "new VertexLitBump" << endl;
-                cout << mesh.num_triangles << endl << mesh.num_vertices << endl;
+                cout << mesh.num_triangles << endl
+                     << mesh.num_vertices << endl;
                 for (int t = 0; t < (int)mesh.num_triangles * 3; t += 3)
                 {
 
@@ -85,55 +89,63 @@ void createOBJfile(BSPFILE bsp)
                 // VertexUnlitTS
                 break;
             case 4:
-            /*
-                cout << "new VertexBlinnPhong" << endl;
-                for (int t = 0; t < mesh.num_triangles * 3; t += 3)
-                {
-                    int idx0 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
-                    int idx1 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t + 1].Indices].position_index + 1;
-                    int idx2 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
+                /*
+                    cout << "new VertexBlinnPhong" << endl;
+                    for (int t = 0; t < mesh.num_triangles * 3; t += 3)
+                    {
+                        int idx0 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
+                        int idx1 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t + 1].Indices].position_index + 1;
+                        int idx2 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
 
-                    file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
-                }*/
+                        file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
+                    }*/
                 break;
             default:
                 break;
             }
         }
     }
+
+    file.close();
 }
 
 int main(int argc, char *argv[])
 {
-    string filename;
-    if (argc == 2)
-    {
-        filename = argv[1];
-    }
-    else
-    {
-        cout << "Please provide a filename as an argument." << endl;
-        return 1;
-    }
-
-    mainBSP = readFullBSP(filename);
-    createOBJfile(mainBSP);
-
     QApplication app(argc, argv);
 
-    QAction *OpenAct;
-    OpenAct = new QAction(
-        QObject::tr("&Open"));
-    OpenAct->setShortcuts(QKeySequence::Open);
-    OpenAct->setStatusTip(QObject::tr("Open a file"));
+    
+    QMainWindow window;
+    window.setWindowTitle("BSP Viewer");
+    window.resize(800, 600);
 
-    QWidget window;
+    
+    QAction *openAct = new QAction(QObject::tr("&Open"), &window);
+    openAct->setShortcuts(QKeySequence::Open);
+    openAct->setStatusTip(QObject::tr("Open a file"));
 
-    // make top file thingy
-    QMenuBar *menuBar = new QMenuBar(&window);
-    QMenu *fileMenu;
-    fileMenu = menuBar->addMenu(QObject::tr("&File"));
-    fileMenu->addAction(OpenAct);
+    
+    QMenu *fileMenu = window.menuBar()->addMenu(QObject::tr("&File"));
+    fileMenu->addAction(openAct);
+
+    QObject::connect(openAct, &QAction::triggered, [&window]()
+                     {
+    
+    QString fileName = QFileDialog::getOpenFileName(
+        &window,
+        QObject::tr("Open BSP File"),
+        "",
+        QObject::tr("BSP Files (*.bsp);;All Files (*)")
+    );
+
+
+    if (!fileName.isEmpty()) {
+        string stdFileName = fileName.toStdString();
+        
+        mainBSP = readFullBSP(stdFileName);
+        createOBJfile(mainBSP);
+        
+        qDebug() << "Loaded new file:" << fileName;
+    } });
 
     window.show();
     return app.exec();
