@@ -811,6 +811,7 @@ struct BSPFILE {
     std::vector<Vertex_Lit_Flat> VertexLitFlat;
     std::vector<Vertex_Lit_Bump> VertexLitBump;
     std::vector<Vertex_unlit_TS> VertexUnlitTS;
+    std::vector<Vertex_Blinn_Phong> VertexBlinnPhong;
     std::vector<Mesh_Indices> MeshIndices;
     std::vector<Mesh> Meshes;
     std::vector<Mesh_Bounds> MeshBounds;

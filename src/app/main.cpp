@@ -38,9 +38,12 @@ void createOBJfile(BSPFILE bsp)
         {
             Mesh &mesh = bsp.Meshes[m];
 
+            int e = 0;
             switch ((int)mesh.vertex_type)
             {
             case 0:
+                //cout << "new VertexUnlit" << endl;
+                /*
                 for (int t = 0; t < mesh.num_triangles * 3; t += 3)
                 {
                     int idx0 = bsp.VertexUnlit[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
@@ -48,9 +51,12 @@ void createOBJfile(BSPFILE bsp)
                     int idx2 = bsp.VertexUnlit[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
 
                     file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
-                }
+                }*/
+               //also some sort of boxes
                 break;
             case 1:
+            /*
+                cout << "new VertexLitFlat" << endl;
                 for (int t = 0; t < mesh.num_triangles * 3; t += 3)
                 {
                     int idx0 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
@@ -58,23 +64,37 @@ void createOBJfile(BSPFILE bsp)
                     int idx2 = bsp.VertexLitFlat[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
 
                     file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
-                }
+                }*/
                 break;
             case 2:
-                for (int t = 0; t < mesh.num_triangles * 3; t += 3)
+                //seems to have most map data
+                cout << "new VertexLitBump" << endl;
+                cout << mesh.num_triangles << endl << mesh.num_vertices << endl;
+                for (int t = 0; t < (int)mesh.num_triangles * 3; t += 3)
                 {
-                    int idx0 = bsp.VertexLitBump[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
-                    int idx1 = bsp.VertexLitBump[bsp.MeshIndices[mesh.first_mesh_index + t + 1].Indices].position_index + 1;
-                    int idx2 = bsp.VertexLitBump[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
 
-                    file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
+                    int idx0 = bsp.VertexLitBump[(int)bsp.MeshIndices[(int)mesh.first_mesh_index + t].Indices].position_index + 1;
+                    int idx1 = bsp.VertexLitBump[(int)bsp.MeshIndices[(int)mesh.first_mesh_index + t + 1].Indices].position_index + 1;
+                    int idx2 = bsp.VertexLitBump[(int)bsp.MeshIndices[(int)mesh.first_mesh_index + t + 2].Indices].position_index + 1;
+
+                    file << "f " << idx2 << " " << idx1 << " " << idx0 << endl;
                 }
                 break;
             case 3:
-                //skyboxes?
-                //VertexUnlitTS
+                // skyboxes?
+                // VertexUnlitTS
                 break;
             case 4:
+            /*
+                cout << "new VertexBlinnPhong" << endl;
+                for (int t = 0; t < mesh.num_triangles * 3; t += 3)
+                {
+                    int idx0 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t].Indices].position_index + 1;
+                    int idx1 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t + 1].Indices].position_index + 1;
+                    int idx2 = bsp.VertexBlinnPhong[bsp.MeshIndices[mesh.first_mesh_index + t + 2].Indices].position_index + 1;
+
+                    file << "f " << idx0 << " " << idx1 << " " << idx2 << endl;
+                }*/
                 break;
             default:
                 break;

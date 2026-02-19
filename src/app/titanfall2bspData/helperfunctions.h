@@ -77,8 +77,9 @@ vector<Planes> readPlanes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PLANES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Planes)  != 0)
     {
+        cout << std::filesystem::file_size(filename) << " " << sizeof(Planes) << endl;
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
     }
@@ -102,7 +103,7 @@ vector<Texture_Data> readTextureData(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::TEXTURE_DATA), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Texture_Data)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -127,7 +128,7 @@ vector<Vertices> readVertices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::VERTICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Vertices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -153,7 +154,7 @@ vector<Lightprobe_Parent_Infos> readLightprobe_Parent_Infos(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTPROBE_PARENT_INFOS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightprobe_Parent_Infos)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -179,7 +180,7 @@ vector<Shadow_Environments> readShadow_Environments(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::SHADOW_ENVIRONMENTS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Shadow_Environments)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -205,7 +206,7 @@ vector<Lightprobe_BSP_Nodes> readLightprobe_BSP_Nodes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTPROBE_BSP_NODES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightprobe_BSP_Nodes)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -229,7 +230,7 @@ vector<Lightprobe_BSP_REF_IDS> readLightprobe_BSP_REF_IDS(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTPROBE_BSP_REF_IDS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightprobe_BSP_REF_IDS)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -254,7 +255,7 @@ vector<Models> readModels(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::MODELS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Models)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -314,7 +315,7 @@ vector<Physics_Collide> readPhysicsCollide(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PHYSICS_COLLIDE), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Physics_Collide)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -339,7 +340,7 @@ vector<Vertex_Normals> readVertexNormals(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::VERTEX_NORMALS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Vertex_Normals)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -364,7 +365,7 @@ vector<Game_Lump> readGameLumps(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::GAME_LUMP), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Game_Lump)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -389,7 +390,7 @@ vector<Leaf_Water_Data> readLeafWaterData(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LEAF_WATER_DATA), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Leaf_Water_Data)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -414,7 +415,7 @@ vector<PAKFile> readpakFile(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PAKFILE), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(PAKFile)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -439,7 +440,7 @@ vector<Cubemap> readcubemap(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CUBEMAP), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Cubemap)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -498,7 +499,7 @@ vector<Texture_Data_String_Table> readTextureDataStringTable(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::TEXTURE_DATA_STRING_TABLE), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Texture_Data_String_Table)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -523,7 +524,7 @@ vector<WORLD_LIGHTSv3> readWorldLights(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::WORLD_LIGHTS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(WORLD_LIGHTSv3)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -548,7 +549,7 @@ vector<World_Light_Parent_Infos> readWorldLightParentInfo(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::WORLD_LIGHT_PARENT_INFOS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(World_Light_Parent_Infos)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -573,7 +574,7 @@ vector<Tricoll_Triangles> readtricollTriangles(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::TRICOLL_TRIANGLES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Tricoll_Triangles)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -598,7 +599,7 @@ vector<Tricoll_Nodes> readtricollNodes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::TRICOLL_NODES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Tricoll_Nodes)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -623,7 +624,7 @@ vector<Tricoll_Headers> readtricollHeaders(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::TRICOLL_HEADERS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Tricoll_Headers)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -648,7 +649,7 @@ vector<Vertex_Unlit> readVertexUnlit(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::VERTEX_UNLIT), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Vertex_Unlit)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -673,7 +674,7 @@ vector<Vertex_Lit_Flat> readVertexLitFlat(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::VERTEX_LIT_FLAT), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Vertex_Lit_Flat)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -698,7 +699,7 @@ vector<Vertex_Lit_Bump> readVertexLitBump(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::VERTEX_LIT_BUMP), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Vertex_Lit_Bump)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -723,7 +724,7 @@ vector<Vertex_unlit_TS> readVertexUnlitTS(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::VERTEX_UNLIT_TS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Vertex_unlit_TS)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -748,7 +749,7 @@ vector<Vertex_Blinn_Phong> readVertexBlinnPhong(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::VERTEX_BLINN_PHONG), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Vertex_Blinn_Phong)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -773,7 +774,7 @@ vector<Mesh_Indices> readMeshIndices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::MESH_INDICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Mesh_Indices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -798,7 +799,7 @@ vector<Mesh> readMeshes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::MESHES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Mesh)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -823,7 +824,7 @@ vector<Mesh_Bounds> readMeshBounds(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::MESH_BOUNDS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Mesh_Bounds)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -848,7 +849,7 @@ vector<Material_Sorts> readMaterialSorts(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::MATERIAL_SORTS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Material_Sorts)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -873,7 +874,7 @@ vector<Lightmap_Headers> readLightmapHeaders(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTMAP_HEADERS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightmap_Headers)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -898,7 +899,7 @@ vector<cm_Grid> readCMGrid(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_GRID), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Grid)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -923,7 +924,7 @@ vector<cm_Grid_Cells> readCMGridCells(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_GRID_CELLS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Grid_Cells)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -948,7 +949,7 @@ vector<cm_Geo_Sets> readCMGeoSets(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_GEO_SETS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Geo_Sets)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -973,7 +974,7 @@ vector<cm_Geo_Set_Bounds> readCMGeoSetBounds(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_GEO_SET_BOUNDS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Geo_Set_Bounds)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -998,7 +999,7 @@ vector<cm_Primitives> readCMPrimitives(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_PRIMITIVES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Primitives)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1023,7 +1024,7 @@ vector<cm_Primitive_Bounds> readCMPrimitiveBounds(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_PRIMITIVE_BOUNDS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Primitive_Bounds)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1048,7 +1049,7 @@ vector<cm_Unique_Contents> readCMUniqueContents(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_UNIQUE_CONTENTS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Unique_Contents)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1073,7 +1074,7 @@ vector<cm_Brushes> readCMBrushes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_BRUSHES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Brushes)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1098,7 +1099,7 @@ vector<cm_Brush_Side_Plane_Offsets> readCMBrushSidePlaneOffsets(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_BRUSH_SIDE_PLANE_OFFSETS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Brush_Side_Plane_Offsets)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1123,7 +1124,7 @@ vector<cm_Brush_Side_Properties> readCMBrushSideProperties(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_BRUSH_SIDE_PROPERTIES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Brush_Side_Properties)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1148,7 +1149,7 @@ vector<cm_Brush_Side_Texture_Vectors> readCMBrushSideTextureVectors(string filen
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CM_BRUSH_SIDE_TEXTURE_VECTORS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(cm_Brush_Side_Texture_Vectors)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1173,7 +1174,7 @@ vector<Tricoll_Bevel_Starts> readTricollBevelStarts(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::TRICOLL_BEVEL_STARTS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Tricoll_Bevel_Starts)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1198,7 +1199,7 @@ vector<Tricoll_Bevel_Indices> readTricollBevelIndices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::TRICOLL_BEVEL_INDICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Tricoll_Bevel_Indices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1223,7 +1224,7 @@ vector<Lightmap_Data_Sky> readLightmapDataSky(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTMAP_DATA_SKY), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightmap_Data_Sky)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1248,7 +1249,7 @@ vector<csm_aabb_Nodes> readCSMaabbNodes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CSM_AABB_NODES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(csm_aabb_Nodes)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1273,7 +1274,7 @@ vector<csm_obj_References> readCSMobjReferences(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CSM_OBJ_REFERENCES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(csm_obj_References)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1298,7 +1299,7 @@ vector<Lightprobes> readLightprobes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTPROBES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightprobes)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1323,7 +1324,7 @@ vector<Static_Prop_Lightprobe_Indices> readStaticPropLightprobeIndices(string fi
     filename = filename + "." + intToHexString(static_cast<int>(lumps::STATIC_PROP_LIGHTPROBE_INDICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Static_Prop_Lightprobe_Indices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1348,7 +1349,7 @@ vector<Lightprobe_Tree> readLightprobeTree(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTPROBE_TREE), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightprobe_Tree)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1373,7 +1374,7 @@ vector<Lightprobe_References> readLightprobeReferences(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTPROBE_REFERENCES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightprobe_References)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1398,7 +1399,7 @@ vector<Lightmap_Data_Real_Time_Light> readLightmapDataRealTimeLight(string filen
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTMAP_DATA_REAL_TIME_LIGHTS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightmap_Data_Real_Time_Light)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1423,7 +1424,7 @@ vector<Cell_bsp_Nodes> readCellbspNodes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CELL_BSP_NODES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Cell_bsp_Nodes)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1448,7 +1449,8 @@ vector<Cells> readCells(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CELLS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(vector<Cells> readCells(string filename)
+)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1473,7 +1475,7 @@ vector<Portals> readPortals(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTALS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portals)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1498,7 +1500,7 @@ vector<Portal_Vertices> readPortalVertices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_VERTICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Vertices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1523,7 +1525,7 @@ vector<Portal_Edges> readPortalEdges(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_EDGES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Edges)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1548,7 +1550,7 @@ vector<Portal_Vertex_Edges> readPortalVertexEdges(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_VERTEX_EDGES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Vertex_Edges)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1573,7 +1575,7 @@ vector<Portal_Vertex_References> readPortalVertexReferences(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_VERTEX_REFERENCES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Vertex_References)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1598,7 +1600,7 @@ vector<Portal_Edge_References> readPortalEdgeReferences(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_EDGE_REFERENCES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Edge_References)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1623,7 +1625,7 @@ vector<Portal_Edge_Intersect_at_Edge> readPortalEdgeIntersectAtEdge(string filen
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_EDGE_INTERSECT_AT_EDGE), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Edge_Intersect_at_Edge)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1648,7 +1650,7 @@ vector<Portal_Edge_Intersect_at_Vertex> readPortalEdgeIntersectAtVertex(string f
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_EDGE_INTERSECT_AT_VERTEX), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Edge_Intersect_at_Vertex)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1673,7 +1675,7 @@ vector<Portal_Edge_Intersect_Header> readPortalEdgeIntersectHeader(string filena
     filename = filename + "." + intToHexString(static_cast<int>(lumps::PORTAL_EDGE_INTERSECT_HEADER), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Portal_Edge_Intersect_Header)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1698,7 +1700,7 @@ vector<Occlusion_Mesh_Vertices> readOcclusionMeshVertices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::OCCLUSION_MESH_VERTICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Occlusion_Mesh_Vertices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1723,7 +1725,7 @@ vector<Occlusion_Mesh_Indices> readOcclusionMeshIndices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::OCCLUSION_MESH_INDICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Occlusion_Mesh_Indices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1748,7 +1750,7 @@ vector<Cell_aabb_Nodes> readCellaabbNodes(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::CELL_AABB_NODES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Cell_aabb_Nodes)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1773,7 +1775,7 @@ vector<obj_References> readOBJReferences(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::OBJ_REFERENCES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(obj_References)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1798,7 +1800,7 @@ vector<obj_Reference_Bounds> readOBJReferenceBounds(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::OBJ_REFERENCE_BOUNDS), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(obj_Reference_Bounds)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1823,7 +1825,7 @@ vector<Lightmap_Data_rtl_Page> readLightmapDataRTLPage(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LIGHTMAP_DATA_RTL_PAGES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Lightmap_Data_rtl_Page)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1848,7 +1850,7 @@ vector<Level_Info> readLevelInfo(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::LEVEL_INFO), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Level_Info)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1873,7 +1875,7 @@ vector<Shadow_Mesh_Opaque_Vertices> readShadowMeshOpaqueVertices(string filename
     filename = filename + "." + intToHexString(static_cast<int>(lumps::SHADOW_MESH_OPAQUE_VERTICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Shadow_Mesh_Opaque_Vertices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1898,7 +1900,7 @@ vector<Shadow_Mesh_Alpha_Vertices> readShadowMeshAlphaVertices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::SHADOW_MESH_ALPHA_VERTICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Shadow_Mesh_Alpha_Vertices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1923,7 +1925,7 @@ vector<Shadow_Mesh_Indices> readShadowMeshIndices(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::SHADOW_MESH_INDICES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Shadow_Mesh_Indices)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -1948,7 +1950,7 @@ vector<Shadow_Meshs> readShadowMeshs(string filename)
     filename = filename + "." + intToHexString(static_cast<int>(lumps::SHADOW_MESHES), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file)
+    if (!file || std::filesystem::file_size(filename) % sizeof(Shadow_Meshs)  != 0)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -2002,6 +2004,7 @@ BSPFILE readFullBSP(string filename){
     mainBSP.VertexLitFlat = readVertexLitFlat(filename);
     mainBSP.VertexLitBump = readVertexLitBump(filename);
     mainBSP.VertexUnlitTS = readVertexUnlitTS(filename);
+    mainBSP.VertexBlinnPhong = readVertexBlinnPhong(filename);
     mainBSP.MeshIndices = readMeshIndices(filename);
     mainBSP.Meshes = readMeshes(filename);
     mainBSP.MeshBounds = readMeshBounds(filename);
