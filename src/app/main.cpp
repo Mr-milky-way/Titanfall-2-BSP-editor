@@ -123,9 +123,13 @@ int main(int argc, char *argv[])
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(QObject::tr("Open a file"));
 
+    QAction *importOBJAct = new QAction(QObject::tr("&Import OBJ file"), &window);
+    importOBJAct->setStatusTip(QObject::tr("Import a obj file into the BSP"));
+
     
     QMenu *fileMenu = window.menuBar()->addMenu(QObject::tr("&File"));
     fileMenu->addAction(openAct);
+    fileMenu->addAction(importOBJAct);
 
     QObject::connect(openAct, &QAction::triggered, [&window]()
                      {
