@@ -46,6 +46,14 @@ struct Vector4B
     uint8_t x, y, z, w;
 };
 
+struct Vector2b {
+    int8_t x, y;
+};
+
+struct Vector2H {
+    uint16_t x, y;
+};
+
 struct Vector2F
 {
     float x, y;
@@ -171,25 +179,62 @@ static_assert(sizeof(Vertex_Normals) == 12, "Vertex_Normals struct size mismatch
 struct Game_Lump_Header
 {
     int32_t unknown1;
-    char prps[4];
-    int32_t unknown2;
-    int32_t unknown3;
-    int32_t unknown4;
-    int32_t modelCount;
+    char signature[4];
+    uint16_t Flags;
+    uint16_t version;
+    uint32_t offset;
+    uint32_t fileSize; // this is -20 due to the size of the header not being included
 };
+
+static_assert(sizeof(Game_Lump_Header) == 20, "Game_Lump_Header struct size mismatch!");
 
 struct Game_Lump_Models
 {
     char Model_Location_str[128];
 };
 
+static_assert(sizeof(Game_Lump_Models) == 128, "Game_Lump_Models struct size mismatch!");
+
+struct Game_Lump_props {
+    Vector3F origin;
+    Vector3F angles;
+    float scale;
+    uint16_t model_name;
+    StaticPropCollision solid_mode;
+    StaticPropFlags flags;
+    uint16_t skin;
+    uint16_t cubemap;
+    float forced_fade_scale;
+    Vector3F lighting_origin;
+    Vector2b cpu_level;
+    Vector2b gpu_level;
+    RGBA32 diffuse_modulation;
+    Vector2H collision_flags;
+};
+
+static_assert(sizeof(Game_Lump_props) == 64, "Game_Lump_props struct size mismatch!");
+
+struct Unknown3 {
+    float unknown1[12];
+    int32_t unknown2[4];
+};
+
+static_assert(sizeof(Unknown3) == 64, "Unknown3 struct size mismatch!");
+
 struct Game_Lump
 {
     Game_Lump_Header Header;
-    std::vector<Game_Lump_Models> Models;
+    uint32_t modelCount;
+    std::vector<Game_Lump_Models> ModelsStr;
+    uint32_t PropCount;
+    uint32_t Unknown1;
+    uint32_t Unknown2;
+    std::vector<Game_Lump_props> props;
+    uint32_t num_unknown_3;
+    std::vector<Unknown3> Unknown_3;
 };
 
-// Lump 36
+// Lump 36 (Not used in titanfall 2)
 struct Leaf_Water_Data
 {
     float surface_z;

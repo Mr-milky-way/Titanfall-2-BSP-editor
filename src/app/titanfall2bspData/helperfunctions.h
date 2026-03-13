@@ -361,6 +361,8 @@ vector<Vertex_Normals> readVertexNormals(string filename)
 Game_Lump readGameLumps(string filename)
 {
     Game_Lump_Header HeaderTemp;
+    Game_Lump_props temp1;
+    Unknown3 temp2;
     Game_Lump_Models temp;
     Game_Lump Lump;
     filename = filename + "." + intToHexString(static_cast<int>(lumps::GAME_LUMP), 4) + ".bsp_lump";
@@ -377,10 +379,42 @@ Game_Lump readGameLumps(string filename)
     }
 
     file.read(reinterpret_cast<char *>(&Lump.Header), sizeof(Game_Lump_Header));
-    for (int i = 0; i < Lump.Header.modelCount; i++) {
+    file.read(reinterpret_cast<char *>(&Lump.modelCount), sizeof(int32_t));
+    for (int i = 0; i < Lump.modelCount; i++) {
         file.read(reinterpret_cast<char *>(&temp), sizeof(Game_Lump_Models));
-        Lump.Models.push_back(temp);
+        Lump.ModelsStr.push_back(temp);
     }
+    file.read(reinterpret_cast<char *>(&Lump.PropCount), sizeof(int32_t));
+    file.read(reinterpret_cast<char *>(&Lump.Unknown1), sizeof(int32_t));
+    file.read(reinterpret_cast<char *>(&Lump.Unknown2), sizeof(int32_t));
+
+    for (int i = 0; i < Lump.PropCount; i++) {
+        file.read(reinterpret_cast<char *>(&temp1), sizeof(Game_Lump_props));
+        Lump.props.push_back(temp1);
+    }
+
+    file.read(reinterpret_cast<char *>(&Lump.num_unknown_3), sizeof(int32_t));
+
+    for (int i = 0; i < Lump.num_unknown_3; i++) {
+        file.read(reinterpret_cast<char *>(&temp2), sizeof(Game_Lump_props));
+        Lump.Unknown_3.push_back(temp2);
+    }
+
+    std::streampos currentPos = file.tellg();
+    file.seekg(0, std::ios::end);
+    std::streampos totalSize = file.tellg();
+    std::streampos remaining = totalSize - currentPos;
+
+    cout << "GAME LUMP HEADER INFO" << endl;
+    cout << "Signature: " << Lump.Header.signature << endl;
+    cout << "Flags: " << Lump.Header.Flags << endl;
+    cout << "Version: " << Lump.Header.version << endl;
+    cout << "Offset: " << Lump.Header.offset << endl;
+    cout << "FileSize: " << Lump.Header.fileSize << endl;
+
+    cout << "currentPos: " << currentPos << endl;
+    cout << "totalSize: " << totalSize << endl;
+    cout << "remaining: " << remaining << endl;
 
     return Lump;
 }

@@ -34,6 +34,28 @@ enum class PortalType : uint8_t {
     WATER = 2
 };
 
+enum class StaticPropCollision : uint8_t {
+    NON_SOLID = 0,
+    UNKNOWN_1 = 1,
+    BOUNDING_BOX = 2,
+    VPHYSICS = 6,
+    UNKNOWN_7 = 7
+};
+
+enum class StaticPropFlags : uint8_t {
+    FADES = 0x1,
+    USE_LIGHTING_ORIGIN = 0x2,
+    NO_DRAW = 0x4,
+    IGNORE_NORMALS = 0x8,
+    NO_SHADOW = 0x10,
+    SCREEN_SPACE_FADE = 0x20,
+    NO_PER_VERTEX_LIGHTING = 0x40,
+    NO_SELF_SHADOWING = 0x80
+    // TO big for uint8_t
+    //NO_PER_TEXEL_LIGHTING = 0x100,
+    //EDITOR_MASK = 0x1D8
+};
+
 enum class TextureDataFlags {
     SKY_2D = 0x0002,
     SKY = 0x0004,
