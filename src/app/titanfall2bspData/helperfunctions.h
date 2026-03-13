@@ -358,14 +358,15 @@ vector<Vertex_Normals> readVertexNormals(string filename)
     return data;
 }
 
-vector<Game_Lump> readGameLumps(string filename)
+Game_Lump readGameLumps(string filename)
 {
-    vector<Game_Lump> data;
-    Game_Lump temp;
+    Game_Lump_Header HeaderTemp;
+    Game_Lump_Models temp;
+    Game_Lump Lump;
     filename = filename + "." + intToHexString(static_cast<int>(lumps::GAME_LUMP), 4) + ".bsp_lump";
     ifstream file(filename, ios::binary);
 
-    if (!file || std::filesystem::file_size(filename) % sizeof(Game_Lump)  != 0)
+    if (!file)
     {
         std::cerr << "Error opening file: " << filename << std::endl;
         return {};
@@ -375,12 +376,13 @@ vector<Game_Lump> readGameLumps(string filename)
         cout << "Reading game lumps from: " << filename << endl;
     }
 
-    while (file.read(reinterpret_cast<char *>(&temp), sizeof(Game_Lump)))
-    {
-        data.push_back(temp);
+    file.read(reinterpret_cast<char *>(&Lump.Header), sizeof(Game_Lump_Header));
+    for (int i = 0; i < Lump.Header.modelCount; i++) {
+        file.read(reinterpret_cast<char *>(&temp), sizeof(Game_Lump_Models));
+        Lump.Models.push_back(temp);
     }
 
-    return data;
+    return Lump;
 }
 
 vector<Leaf_Water_Data> readLeafWaterData(string filename)
@@ -1988,7 +1990,7 @@ BSPFILE readFullBSP(string filename){
     mainBSP.entity_partitions = readEntityPartitions(filename);
     mainBSP.physics_collide = readPhysicsCollide(filename);
     mainBSP.vertex_normals = readVertexNormals(filename);
-    mainBSP.game_lumps = readGameLumps(filename);
+    mainBSP.game_lump = readGameLumps(filename);
     mainBSP.LeafWaterData = readLeafWaterData(filename);
     mainBSP.pakFile = readpakFile(filename);
     mainBSP.cubemap = readcubemap(filename);

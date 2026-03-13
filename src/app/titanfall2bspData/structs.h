@@ -166,8 +166,27 @@ struct Vertex_Normals
 static_assert(sizeof(Vertex_Normals) == 12, "Vertex_Normals struct size mismatch!");
 
 // Lump 35
+
+// Lump 35
+struct Game_Lump_Header
+{
+    int32_t unknown1;
+    char prps[4];
+    int32_t unknown2;
+    int32_t unknown3;
+    int32_t unknown4;
+    int32_t modelCount;
+};
+
+struct Game_Lump_Models
+{
+    char Model_Location_str[128];
+};
+
 struct Game_Lump
 {
+    Game_Lump_Header Header;
+    std::vector<Game_Lump_Models> Models;
 };
 
 // Lump 36
@@ -796,7 +815,7 @@ struct BSPFILE {
     std::vector<Entity_Partitions> entity_partitions;
     std::vector<Physics_Collide> physics_collide;
     std::vector<Vertex_Normals> vertex_normals;
-    std::vector<Game_Lump> game_lumps;
+    Game_Lump game_lump;
     std::vector<Leaf_Water_Data> LeafWaterData;
     std::vector<PAKFile> pakFile;
     std::vector<Cubemap> cubemap;
