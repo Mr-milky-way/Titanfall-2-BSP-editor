@@ -14,11 +14,26 @@
 #include <QMenu>
 #include <QObject>
 #include <QFileDialog>
+#include <QtConcurrent/QtConcurrent>
+#include <QFuture>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
+#include <QOpenGLBuffer>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QSettings>
 
 #include "titanfall2bspData/structs.h"
 #include "titanfall2bspData/helperfunctions.h"
+#include "titanfall2bspData/openGL.h"
+#include "titanfall2bspData/SettingsDialog.h"
+
+extern BSPFILE mainBSP;
+extern SettingsStruct settings;
 
 using namespace std;
+
+SettingsStruct settings;
 
 BSPFILE mainBSP;
 
@@ -113,43 +128,98 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
+
+    QSettings s("Mr-Milky-Way", "BSPViewer");
+    settings.renderLitFlat = s.value("renderLitFlat", true).toBool();
     
     QMainWindow window;
     window.setWindowTitle("BSP Viewer");
     window.resize(800, 600);
+
+
+    BSPVisualizer* visualizer = new BSPVisualizer(&window);
+    window.setCentralWidget(visualizer);
 
     
     QAction *openAct = new QAction(QObject::tr("&Open"), &window);
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(QObject::tr("Open a file"));
 
-    QAction *importOBJAct = new QAction(QObject::tr("&Import OBJ file"), &window);
-    importOBJAct->setStatusTip(QObject::tr("Import a obj file into the BSP"));
+    QAction *ChangeSettings = new QAction(QObject::tr("&Settings"), &window);
+    ChangeSettings->setStatusTip(QObject::tr("Change settings"));
 
     
     QMenu *fileMenu = window.menuBar()->addMenu(QObject::tr("&File"));
     fileMenu->addAction(openAct);
-    fileMenu->addAction(importOBJAct);
-
-    QObject::connect(openAct, &QAction::triggered, [&window]()
-                     {
-    
-    QString fileName = QFileDialog::getOpenFileName(
-        &window,
-        QObject::tr("Open BSP File"),
-        "",
-        QObject::tr("BSP Files (*.bsp);;All Files (*)")
-    );
 
 
-    if (!fileName.isEmpty()) {
-        string stdFileName = fileName.toStdString();
-        
-        mainBSP = readFullBSP(stdFileName);
-        createOBJfile(mainBSP);
-        
-        qDebug() << "Loaded new file:" << fileName;
-    } });
+    QMenu* OptionsMenu = window.menuBar()->addMenu(QObject::tr("&Options"));
+    OptionsMenu->addAction(ChangeSettings);
+
+    QObject::connect(ChangeSettings, &QAction::triggered, [&]() {
+        SettingsDialog dlg(&window);
+
+        if (dlg.exec() == QDialog::Accepted) {
+            settings.renderLitFlat = dlg.RenderLitFlat();
+            settings.renderUnlit = dlg.RenderUnlit();
+            settings.renderLitBump = dlg.RenderLitBump();
+            settings.renderUnlitTS = dlg.RenderUnlitTS();
+
+            QSettings s("Mr-Milky-Way", "BSPViewer");
+            s.setValue("renderLitFlat", settings.renderLitFlat);
+            s.setValue("renderUnlit", settings.renderUnlit);
+            s.setValue("renderLitBump", settings.renderLitBump);
+            s.setValue("renderUnlitTS", settings.renderUnlitTS);
+
+            visualizer->makeCurrent();
+            visualizer->uploadBSPData();
+            visualizer->doneCurrent();
+            visualizer->update();
+        }
+        });
+
+    QObject::connect(openAct, &QAction::triggered, [&]() {
+        QString fileName = QFileDialog::getOpenFileName(
+            &window,
+            QObject::tr("Open BSP File"),
+            "",
+            QObject::tr("BSP Files (*.bsp);;All Files (*)")
+        );
+
+        if (!fileName.isEmpty()) {
+            string stdFileName = fileName.toStdString();
+
+            
+            openAct->setEnabled(false);
+            window.setWindowTitle("Loading BSP... Please wait");
+
+            
+            QFuture<void> future = QtConcurrent::run([stdFileName]() {
+                mainBSP = readFullBSP(stdFileName);
+                createOBJfile(mainBSP);
+                });
+
+            
+            QFutureWatcher<void>* watcher = new QFutureWatcher<void>(&window);
+
+            QObject::connect(watcher, &QFutureWatcher<void>::finished,
+    [watcher, visualizer, openAct, windowPtr = &window]() {
+        windowPtr->setWindowTitle("BSP Viewer - Load Complete");
+        openAct->setEnabled(true);
+
+        visualizer->makeCurrent();
+        visualizer->uploadBSPData();
+        visualizer->doneCurrent();
+        qDebug() << "Background loading finished and uploaded to GPU!";
+        visualizer->update();
+        watcher->deleteLater();
+    });
+
+            watcher->setFuture(future);
+        }
+        });
+
+	visualizer->update();
 
     window.show();
     return app.exec();

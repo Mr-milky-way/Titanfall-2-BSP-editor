@@ -12,6 +12,13 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+// Main Settings
+struct SettingsStruct {
+	bool renderLitFlat = true;
+    bool renderUnlit = true;
+    bool renderLitBump = true;
+    bool renderUnlitTS = false;
+};
 
 struct RGBA32
 {

@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "D:/qt/6.11.0/msvc2022_64",
+        "Qt6_DIR": "D:/qt/6.11.0/msvc2022_64/lib/cmake/Qt6"
+      }
+    }
+  ]
+}
