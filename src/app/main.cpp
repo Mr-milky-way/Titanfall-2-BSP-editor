@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
             
             QFuture<void> future = QtConcurrent::run([stdFileName]() {
                 mainBSP = readFullBSP(stdFileName);
-                createOBJfile(mainBSP);
+                //createOBJfile(mainBSP);
                 });
 
             

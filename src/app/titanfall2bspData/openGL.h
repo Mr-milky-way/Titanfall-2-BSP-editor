@@ -21,6 +21,11 @@
 #include <QOpenGLBuffer>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QMatrix4x4>
+#include <QKeyEvent>
+#include <QWidget>
+#include <cmath>
+#include <Qt>
 
 #include "structs.h"
 #include "helperfunctions.h"
@@ -33,19 +38,29 @@ extern SettingsStruct settings;
 
 
 class BSPVisualizer : public QOpenGLWidget, protected QOpenGLFunctions {
+
     QOpenGLBuffer vbo{ QOpenGLBuffer::VertexBuffer };
     QOpenGLBuffer ibo{ QOpenGLBuffer::IndexBuffer };
     int indexCount = 0;
     int vertexCount = 0;
 
-
-    float rotationX = -90.0f;
-    float rotationY = 0.0f;
     float zoom = -5000.0f;
     QPoint lastMousePos;
 
+
+    QVector3D cameraPos = QVector3D(0.0f, 0.0f, 5000.0f);
+    QVector3D cameraFront = QVector3D(0.0f, 1.0f, 0.0f);
+    QVector3D cameraUp = QVector3D(0.0f, 0.0f, 1.0f);
+
+    float yaw = -90.0f;
+    float pitch = 0.0f;
+    float movementSpeed = 50.0f;
+    float mouseSensitivity = 0.2f;
+
 public:
-    BSPVisualizer(QWidget* parent = nullptr) : QOpenGLWidget(parent) {}
+    BSPVisualizer(QWidget* parent = nullptr) : QOpenGLWidget(parent) {
+        setFocusPolicy(Qt::StrongFocus);
+    }
 
 
     struct RenderVertex {
@@ -118,18 +133,21 @@ public:
         std::vector<unsigned int> validatedIndices;
         for (const auto& tfMesh : mainBSP.Meshes) {
 
-            unsigned int triOffset = mainBSP.MaterialSorts[tfMesh.material_sort].vertex_offset;
+            uint32_t triOffset = mainBSP.MaterialSorts[tfMesh.material_sort].vertex_offset;
 
-            // Apply block offsets based on flags
             uint32_t f = (uint32_t)tfMesh.flags;
-            if (f & (uint32_t)TextureDataFlags::VERTEX_UNLIT && settings.renderLitFlat == true) {
-                triOffset += mainBSP.VertexLitFlat.size();
-            }  
-            if (f & (uint32_t)TextureDataFlags::VERTEX_LIT_BUMP && settings.renderUnlit == true) {
-                triOffset += (mainBSP.VertexLitFlat.size() + mainBSP.VertexUnlit.size());
+
+            if ((f & (uint32_t)TextureDataFlags::VERTEX_LIT_FLAT) && startLitFlat != UINT32_MAX) {
+                triOffset += startLitFlat;
             }
-            if (f & (uint32_t)TextureDataFlags::VERTEX_UNLIT_TS && settings.renderUnlitTS == true) {
-                triOffset += (mainBSP.VertexLitFlat.size() + mainBSP.VertexUnlit.size() + mainBSP.VertexLitBump.size());
+            else if ((f & (uint32_t)TextureDataFlags::VERTEX_UNLIT) && startUnlit != UINT32_MAX) {
+                triOffset += startUnlit;
+            }
+            else if ((f & (uint32_t)TextureDataFlags::VERTEX_LIT_BUMP) && startLitBump != UINT32_MAX) {
+                triOffset += startLitBump;
+            }
+            else if ((f & (uint32_t)TextureDataFlags::VERTEX_UNLIT_TS) && startUnlitTS != UINT32_MAX) {
+                triOffset += startUnlitTS;
             }
 
             for (uint32_t i = 0; i < (uint32_t)tfMesh.num_triangles * 3; i++) {
@@ -141,6 +159,7 @@ public:
                     }
                     else {
                         qDebug() << "Invalid finalIdx" << finalIdx << "vs pool" << renderPool.size();
+                        continue;
                     }
                 }
                 else {
@@ -160,21 +179,54 @@ public:
 
 protected:
 
+    void keyPressEvent(QKeyEvent* event) override {
+        float velocity = movementSpeed;
+
+        QVector3D right = QVector3D::crossProduct(cameraFront, cameraUp).normalized();
+
+        if (event->key() == Qt::Key_W)
+            cameraPos += velocity * cameraFront;
+        if (event->key() == Qt::Key_S)
+            cameraPos -= velocity * cameraFront;
+        if (event->key() == Qt::Key_A)
+            cameraPos -= right * velocity;
+        if (event->key() == Qt::Key_D)
+            cameraPos += right * velocity;
+        if (event->key() == Qt::Key_Q)
+            cameraPos -= cameraUp * velocity;
+        if (event->key() == Qt::Key_E)
+            cameraPos += cameraUp * velocity;
+
+        update();
+    }
+
     void mousePressEvent(QMouseEvent* event) override {
         lastMousePos = event->pos();
     }
 
 
     void mouseMoveEvent(QMouseEvent* event) override {
-        int dx = event->x() - lastMousePos.x();
-        int dy = event->y() - lastMousePos.y();
+        float dx = event->x() - lastMousePos.x();
+        float dy = lastMousePos.y() - event->y();
 
-        if (event->buttons() & Qt::LeftButton) {
-            rotationX += dy * 0.5f;
-            rotationY += dx * 0.5f;
-            update();
-        }
         lastMousePos = event->pos();
+
+        dx *= mouseSensitivity;
+        dy *= mouseSensitivity;
+
+        yaw -= dx;
+        pitch += dy;
+
+        if (pitch > 89.0f) pitch = 89.0f;
+        if (pitch < -89.0f) pitch = -89.0f;
+
+        QVector3D front;
+        front.setX(cos(qDegreesToRadians(yaw)) * cos(qDegreesToRadians(pitch)));
+        front.setY(sin(qDegreesToRadians(yaw)) * cos(qDegreesToRadians(pitch)));
+        front.setZ(sin(qDegreesToRadians(pitch)));
+        cameraFront = front.normalized();
+
+        update();
     }
 
 
@@ -202,11 +254,15 @@ protected:
         float aspect = (float)width() / height();
         glFrustum(-aspect, aspect, -1.0f, 1.0f, 1.0f, 100000.0f);
 
+
+        glEnable(GL_POLYGON_OFFSET_LINE);
+        glPolygonOffset(-1.0f, -1.0f);
+
+        QMatrix4x4 view;
+        view.lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glTranslatef(0, 0, zoom);
-        glRotatef(rotationX, 1, 0, 0);
-        glRotatef(rotationY, 0, 0, 1);
+        glLoadMatrixf(view.constData());
 
         vbo.bind();
         ibo.bind();
