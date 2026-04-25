@@ -511,19 +511,24 @@ vector<Texture_Data_String_Data> readTextureDataStringData(string filename)
         cout << "Reading Texture data string data from: " << filename << endl;
     }
 
-    string line;
-    string word;
-    int i = 0;
-    while (getline(file, line, '\0'))
-    {
-        std::stringstream ss(line);
-        while (ss >> word)
-        {
-            temp.strings.push_back(word);
-            i++;
+    file.seekg(0, ios::end);
+    size_t size = file.tellg();
+    file.seekg(0, ios::beg);
+
+    vector<char> buffer(size);
+    file.read(buffer.data(), size);
+
+    // Parse null-terminated strings
+    size_t start = 0;
+    for (size_t i = 0; i < size; i++) {
+        if (buffer[i] == '\0') {
+            if (i > start) {
+                temp.strings.emplace_back(&buffer[start]);
+            }
+            start = i + 1;
         }
-        data.push_back(temp);
     }
+    data.push_back(temp);
 
     return data;
 }

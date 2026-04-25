@@ -35,6 +35,8 @@ using namespace std;
 
 SettingsStruct settings;
 
+filesystem::path WorkingFolder;
+
 BSPFILE mainBSP;
 
 void createOBJfile(BSPFILE bsp)
@@ -136,7 +138,6 @@ int main(int argc, char *argv[])
     window.setWindowTitle("BSP Viewer");
     window.resize(800, 600);
 
-
     BSPVisualizer* visualizer = new BSPVisualizer(&window);
     window.setCentralWidget(visualizer);
 
@@ -195,7 +196,12 @@ int main(int argc, char *argv[])
 
             
             QFuture<void> future = QtConcurrent::run([stdFileName]() {
+
                 mainBSP = readFullBSP(stdFileName);
+
+                filesystem::path temp = stdFileName;
+                WorkingFolder = temp.parent_path().parent_path();
+
                 //createOBJfile(mainBSP);
                 });
 
