@@ -1,6 +1,6 @@
 # Titanfall BSP editor
 
-- Curently still a very big WIP (more of a viewer and should be juded as such)
+- Curently still a very big WIP (more of a viewer and should be judged as such)
 
 Currently uses OpenGL to view the maps but before I can continue I need to swap to DX11 (that's what Titanfall uses).
 
