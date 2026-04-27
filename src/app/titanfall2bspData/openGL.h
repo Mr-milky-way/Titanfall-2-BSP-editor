@@ -36,12 +36,12 @@
 extern BSPFILE mainBSP;
 extern SettingsStruct settings;
 extern filesystem::path WorkingFolder;
+extern filesystem::path modelsFolder;
+
 
 
 #ifndef OPENGL_H
 #define OPENGL_H
-
-filesystem::path modelsFolder;
 
 struct MeshDraw { // might be able to swap to the raw Mesh pulled 
 	uint32_t indexOffset;
@@ -162,7 +162,7 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		int width, height, nrChannels;
-		unsigned char* data = stbi_load("C:\\Users\\dougl\\Downloads\\download.png", &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load("resources/missing_texture.png", &width, &height, &nrChannels, 0);
 		if (data)
 		{
 			GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
@@ -181,11 +181,11 @@ public:
 
 		materialTextures.resize(mainBSP.texture_data.size());
 
-		modelsFolder = "D:\\rsx_2.0.0a\\exported_files\\texture";
 
 		if (vlInitialize()) {
 			VTFLib::CVTFFile vtfFile;
 
+			if (filesystem::exists(modelsFolder)) {
 			for (size_t i = 0; i < materialTextures.size(); i++) {
 				std::string matLower = mainBSP.TextureDataStringData[0].strings[i];
 				std::transform(matLower.begin(), matLower.end(), matLower.begin(),
@@ -217,44 +217,48 @@ public:
 				stbi_image_free(data);
 
 			}
-
-
-			/*for (size_t i = 0; i < materialTextures.size(); i++) {
-				vlByte tempColor[4] = {
-					static_cast<vlByte>((i * 70) % 256),
-					static_cast<vlByte>((i * 140) % 256),
-					static_cast<vlByte>((i * 210) % 256),
-					255
-				};
-
-				const vlUInt width = 64;
-				const vlUInt height = 64;
-
-				std::vector<vlByte> dst(width * height * 4);
-
-				for (size_t p = 0; p < dst.size(); p += 4) {
-					dst[p + 0] = tempColor[0];
-					dst[p + 1] = tempColor[1];
-					dst[p + 2] = tempColor[2];
-					dst[p + 3] = tempColor[3];
-				}
-
-				GLuint tex;
-				glGenTextures(1, &tex);
-				glBindTexture(GL_TEXTURE_2D, tex);
-
-				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
-					0, GL_RGBA, GL_UNSIGNED_BYTE, dst.data());
-
-				glGenerateMipmap(GL_TEXTURE_2D);
-
-				materialTextures[i] = tex;
-
-				const auto& mat = mainBSP.TextureDataStringData[0].strings[i];
-				std::cout << "Using temp texture for: " << mat << std::endl;
 			}
+			else {
+				for (size_t i = 0; i < materialTextures.size(); i++) {
+					vlByte tempColor[4] = {
+						static_cast<vlByte>((i * 70) % 256),
+						static_cast<vlByte>((i * 140) % 256),
+						static_cast<vlByte>((i * 210) % 256),
+						255
+					};
+
+					const vlUInt width = 64;
+					const vlUInt height = 64;
+
+					std::vector<vlByte> dst(width * height * 4);
+
+					for (size_t p = 0; p < dst.size(); p += 4) {
+						dst[p + 0] = tempColor[0];
+						dst[p + 1] = tempColor[1];
+						dst[p + 2] = tempColor[2];
+						dst[p + 3] = tempColor[3];
+					}
+
+					GLuint tex;
+					glGenTextures(1, &tex);
+					glBindTexture(GL_TEXTURE_2D, tex);
+
+					glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
+						0, GL_RGBA, GL_UNSIGNED_BYTE, dst.data());
+
+					glGenerateMipmap(GL_TEXTURE_2D);
+
+					materialTextures[i] = tex;
+
+					const auto& mat = mainBSP.TextureDataStringData[0].strings[i];
+					std::cout << "Using temp texture for: " << mat << std::endl;
+				}
+			}
+
+
+			/*
 			//For VTF
 			for (size_t i = 0; i < materialTextures.size(); i++) {
 				const auto& mat = mainBSP.TextureDataStringData[0].strings[i];

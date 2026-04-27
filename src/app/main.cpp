@@ -36,6 +36,7 @@ using namespace std;
 SettingsStruct settings;
 
 filesystem::path WorkingFolder;
+filesystem::path modelsFolder;
 
 BSPFILE mainBSP;
 
@@ -133,6 +134,9 @@ int main(int argc, char *argv[])
 
     QSettings s("Mr-Milky-Way", "BSPViewer");
     settings.renderLitFlat = s.value("renderLitFlat", true).toBool();
+    settings.renderUnlit = s.value("renderUnlit", true).toBool();
+    settings.renderLitBump = s.value("renderLitBump", true).toBool();
+    settings.renderUnlitTS = s.value("renderUnlitTS", true).toBool();
     
     QMainWindow window;
     window.setWindowTitle("BSP Viewer");
@@ -146,12 +150,17 @@ int main(int argc, char *argv[])
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(QObject::tr("Open a file"));
 
+    QAction* ChangeTexureLocaction = new QAction(QObject::tr("&Change Texture Location"), &window);
+    ChangeTexureLocaction->setShortcuts(QKeySequence::Open);
+    ChangeTexureLocaction->setStatusTip(QObject::tr("Change texture location"));
+
     QAction *ChangeSettings = new QAction(QObject::tr("&Settings"), &window);
     ChangeSettings->setStatusTip(QObject::tr("Change settings"));
 
     
     QMenu *fileMenu = window.menuBar()->addMenu(QObject::tr("&File"));
     fileMenu->addAction(openAct);
+    fileMenu->addAction(ChangeTexureLocaction);
 
 
     QMenu* OptionsMenu = window.menuBar()->addMenu(QObject::tr("&Options"));
@@ -177,6 +186,41 @@ int main(int argc, char *argv[])
             visualizer->doneCurrent();
             visualizer->update();
         }
+        });
+
+    QObject::connect(ChangeTexureLocaction, &QAction::triggered, [&]() {
+        QString dirPath = QFileDialog::getExistingDirectory(
+            &window,
+            QObject::tr("Select BSP Assets Folder"),
+            "",
+            QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+        );
+
+        if (dirPath.isEmpty()) return;
+
+        std::string stdDirPath = dirPath.toStdString();
+
+        ChangeTexureLocaction->setEnabled(false);
+        window.setWindowTitle("Loading Assets... Please wait");
+
+        QFuture<void> future = QtConcurrent::run([stdDirPath]() {
+            modelsFolder = stdDirPath;
+            });
+
+
+        auto* watcher = new QFutureWatcher<void>(&window);
+        QObject::connect(watcher, &QFutureWatcher<void>::finished, [=, &window]() {
+            window.setWindowTitle("BSP Viewer - Folder Loaded");
+            ChangeTexureLocaction->setEnabled(true);
+
+            visualizer->makeCurrent();
+            visualizer->uploadBSPData();
+            visualizer->doneCurrent();
+            visualizer->update();
+            watcher->deleteLater();
+            });
+
+        watcher->setFuture(future);
         });
 
     QObject::connect(openAct, &QAction::triggered, [&]() {
